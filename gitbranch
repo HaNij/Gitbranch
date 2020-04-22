@@ -18,7 +18,7 @@ function check {
 function switch {
     cd $path/$1/
     git reset HEAD --hard
-    if [[ -z $(git branch | grep "$ticket") ]]
+    if [[ -z $(git branch -a | grep "$ticket") ]]
     then
         echo "-------------------------------------------------------"
         echo "$1 doesn't have branch $ticket, switching to master..."
@@ -30,6 +30,7 @@ function switch {
         echo "-------------------------------------------------------"
         git checkout $ticket
     fi
+    git fetch
     git pull
     check $1
 }
