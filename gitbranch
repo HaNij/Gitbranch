@@ -33,21 +33,3 @@ function switchBranch {
     git pull
  getBranch $1
 }
-
-# Если не передаем скрипту название тикета, то просто проверяем модули на каких ветках
-if [[ -z $1 ]]
-then
-    getBranch app
-    getBranch v4
-    getBranch v5
-    getBranch scripts
-    getBranch g3
-    getBranch stat
-else
-    switchBranch app
-    switchBranch v4
-    switchBranch v5
-    switchBranch scripts
-    switchBranch g3
-    switchBranch stat
-fi
