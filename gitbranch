@@ -1,23 +1,23 @@
 #!/bin/bash
 
 # Путь до директории ЕСС
-path=/mnt/ess/
+path=/home/savinov/ess
 
 # Название тикета
 ticket=$1
 
-# Проверить на какой ветки модуль
-# $1 - модуль
-function check {
+# Отобразить название ветки
+function getBranch {
     cd $path/$1/
     branch=$(git symbolic-ref --short HEAD)
     echo "$1 ---> $branch"
 }
 
-# Перейти на ветку тикета, если такой существует, иначе переходит на ветку master
-function switch {
+# Перейти на ветку тикета, если такой существует, иначе переходить на ветку master
+function switchBranch {
     cd $path/$1/
     git reset HEAD --hard
+    git fetch
     if [[ -z $(git branch -a | grep "$ticket") ]]
     then
         echo "-------------------------------------------------------"
@@ -30,25 +30,24 @@ function switch {
         echo "-------------------------------------------------------"
         git checkout $ticket
     fi
-    git fetch
     git pull
-    check $1
+ getBranch $1
 }
 
-# Если не передаем скрипту название тикет, то просто проверяем модули на каких ветках
+# Если не передаем скрипту название тикета, то просто проверяем модули на каких ветках
 if [[ -z $1 ]]
 then
-    check app
-    check v4
-    check v5
-    check scripts
-    check g3
-    check stat
+    getBranch app
+    getBranch v4
+    getBranch v5
+    getBranch scripts
+    getBranch g3
+    getBranch stat
 else
-    switch app
-    switch v4
-    switch v5
-    switch scripts
-    switch g3
-    switch stat
+    switchBranch app
+    switchBranch v4
+    switchBranch v5
+    switchBranch scripts
+    switchBranch g3
+    switchBranch stat
 fi
